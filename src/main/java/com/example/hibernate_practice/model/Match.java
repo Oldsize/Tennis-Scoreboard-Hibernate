@@ -1,5 +1,4 @@
-package com.example.hibernate_practice.Entity;
-
+package com.example.hibernate_practice.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
