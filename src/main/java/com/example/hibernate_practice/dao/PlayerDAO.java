@@ -5,6 +5,8 @@ import com.example.hibernate_practice.utils.ConnectionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import java.util.Optional;
+
 public class PlayerDAO {
     private static final PlayerDAO INSTANCE = new PlayerDAO();
 
@@ -17,21 +19,37 @@ public class PlayerDAO {
 
     ConnectionManager connectionManager = ConnectionManager.getInstance();
 
-    public Player createPlayer(Player player) {
+    public Player savePlayer(Player player) {
         SessionFactory factory = connectionManager.getSessionFactory();
         Session session = null;
-        Player created_player = null;
         try {
             session = factory.getCurrentSession();
             session.beginTransaction();
-            created_player = new Player();
-            created_player.setName(player.getName());
-            session.save(created_player);
+            session.saveOrUpdate(player);
             session.getTransaction().commit();
         } finally {
-            factory.close();
-            session.close();
+            if (session != null) {
+                session.close();
+            }
         }
-        return created_player;
+        return player;
+    }
+
+    public Optional<Player> findPlayerByName(String name) {
+        SessionFactory factory = connectionManager.getSessionFactory();
+        Session session = null;
+        String hql = "FROM Player WHERE name = :name";
+        Optional<Player> findedPlayer = Optional.empty();
+        try {
+            session = factory.getCurrentSession();
+            session.beginTransaction();
+            findedPlayer = session.createQuery(hql).setParameter("name", name).uniqueResultOptional();
+            session.getTransaction().commit();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return findedPlayer;
     }
 }
