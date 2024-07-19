@@ -55,9 +55,7 @@ public class MatchScoreController extends HttpServlet {
             Match match = matchOpt.get();
             MatchScore matchScore = match.getMatchScore();
             this.matchScoreCalculationService.setMatchScore(matchScore);
-
             String player_winner_point = req.getParameter("player_winner_point");
-
             if (!matchScore.isTieBreak()) {
                 if (player_winner_point.equals("FIRST_PLAYER")) {
                     this.matchScoreCalculationService.playerWins15Points(EPlayer.FIRST_PLAYER);

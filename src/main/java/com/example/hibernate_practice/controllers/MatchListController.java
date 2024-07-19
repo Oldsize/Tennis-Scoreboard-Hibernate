@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @WebServlet(name = "match_list_controller", value = "/matches/*")
 public class MatchListController extends HttpServlet {
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MatchDAO matchDAO = MatchDAO.getInstance();
         boolean isNextPage;
@@ -57,7 +56,7 @@ public class MatchListController extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/Error.jsp").forward(request, response);
             } else {
                 parcipicantPlayerMatchesList = matchDAO.findMatchesByParticipantPlayer(filter_by_player_name_parameter, PAGE_PARAMETER_INT);
-                int pageCounter = Math.floorDiv(counter, 10);
+                int pageCounter = (int) Math.ceil(counter / 10.0);
                 if (pageCounter == 0)
                     pageCounter = 1;
                 if (PAGE_PARAMETER_INT > pageCounter) {
@@ -71,10 +70,8 @@ public class MatchListController extends HttpServlet {
                         } else {
                             request.setAttribute("Match" + (i + 1), null);
                         }
-
                         request.setAttribute("currentPage", PAGE_PARAMETER_INT);
                         request.getRequestDispatcher("/WEB-INF/MatchesList.jsp").forward(request, response);
-
                     }
                 }
             }
@@ -82,7 +79,7 @@ public class MatchListController extends HttpServlet {
             currentPageMatchesList = matchDAO.getMatchesByPage(PAGE_PARAMETER_INT);
             allMatchesList = matchDAO.getAllMatches();
             int counter = allMatchesList.size();
-            int pageCounter = Math.floorDiv(counter, 10);
+            int pageCounter = (int) Math.ceil(counter / 10.0);
             if (pageCounter == 0)
                 pageCounter = 1;
             if (PAGE_PARAMETER_INT > pageCounter) {
