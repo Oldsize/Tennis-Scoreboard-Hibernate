@@ -22,7 +22,7 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
-            margin-top: 50px; /* Смещение блока вниз */
+            margin-top: 50px;
         }
         .container h1 {
             text-align: center;
@@ -76,6 +76,21 @@
             color: #b2dfdb;
         }
     </style>
+    <script>
+        function validateForm() {
+            var name1 = document.getElementById("name1").value.trim();
+            var name2 = document.getElementById("name2").value.trim();
+            if (name1 === "" || name2 === "") {
+                alert("Please fill out both fields.");
+                return false;
+            }
+            if (name1 === name2) {
+                alert("Player names must be different.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 

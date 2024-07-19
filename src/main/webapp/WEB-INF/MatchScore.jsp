@@ -95,7 +95,7 @@
 <body>
 
 <div class="nav-bar">
-    <a href="/">Welcome Page</a>
+    <a href="/hibernate_practice_war_exploded/">Welcome Page</a>
     <a href="/hibernate_practice_war_exploded/matches">Matches List</a>
 </div>
 
