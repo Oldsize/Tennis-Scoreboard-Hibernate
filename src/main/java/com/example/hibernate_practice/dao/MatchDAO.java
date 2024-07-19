@@ -1,6 +1,7 @@
 package com.example.hibernate_practice.dao;
 
 import com.example.hibernate_practice.model.Match;
+import com.example.hibernate_practice.model.Player;
 import com.example.hibernate_practice.utils.ConnectionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -60,13 +61,15 @@ public class MatchDAO {
         int pageSize = 10;
         SessionFactory factory = connectionManager.getSessionFactory();
         Session session = null;
+        PlayerDAO playerDAO = PlayerDAO.getInstance();
         List<Match> findedMatches = new ArrayList<>();
         String hql = "FROM Match WHERE player1 = :name OR player2 = :name";
         try {
             session = factory.getCurrentSession();
             session.beginTransaction();
+            Player participantPlayerModel = playerDAO.findPlayerByName(participantPlayer).get();
             Query<Match> query = session.createQuery(hql, Match.class);
-            query.setParameter("name", participantPlayer);
+            query.setParameter("name", participantPlayerModel);
             query.setFirstResult((pageNumber - 1) * pageSize);
             query.setMaxResults(pageSize);
             findedMatches = query.list();
