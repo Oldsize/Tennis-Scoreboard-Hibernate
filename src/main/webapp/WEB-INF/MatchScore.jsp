@@ -23,7 +23,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 600px;
-            margin-top: 50px; /* Смещение блока вниз */
+            margin-top: 50px;
         }
         .scoreboard {
             width: 48%;
