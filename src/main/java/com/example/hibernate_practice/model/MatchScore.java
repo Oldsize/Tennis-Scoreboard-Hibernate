@@ -83,4 +83,7 @@ public class MatchScore {
         tieBreakPoints[player.ordinal()]++;
     }
 
+    public void tieBreakEnded() {
+        tieBreak = false;
+    }
 }
