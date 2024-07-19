@@ -34,7 +34,9 @@ public class MatchScoreCalculationService {
         } else if (player == EPlayer.SECOND_PLAYER) {
             opponentGames = this.matchScore.getPlayerGames(EPlayer.FIRST_PLAYER);
         }
-
+        if (opponentGames <= 4) {
+            playerWinsSet(player);
+        }
         if (playerGames == 5 && opponentGames == 6 || playerGames == 6 && opponentGames == 5) {
             this.matchScore.setPlayerGames(EPlayer.FIRST_PLAYER, 6);
             this.matchScore.setPlayerGames(EPlayer.SECOND_PLAYER, 6);
