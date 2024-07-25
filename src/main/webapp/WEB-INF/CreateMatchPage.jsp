@@ -95,13 +95,14 @@
 <body>
 
 <div class="nav-bar">
-    <a href="/hibernate_practice_war_exploded">Welcome Page</a>
-    <a href="/hibernate_practice_war_exploded/matches">Matches List</a>
+    <a href="${pageContext.request.contextPath}/">Welcome Page</a>
+    <a href="${pageContext.request.contextPath}/matches/">Matches List</a>
 </div>
 
 <div class="container">
     <h1>Create Match</h1>
-    <form method="post" action="/hibernate_practice_war_exploded/new-match" onsubmit="return validateForm()">
+    <% String contextPath = request.getContextPath(); %>
+    <form method="post" action="<%= contextPath %>/new-match/" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="name1">Player 1 Name:</label>
             <input type="text" id="name1" name="player1" maxlength="25" placeholder="Player 1">

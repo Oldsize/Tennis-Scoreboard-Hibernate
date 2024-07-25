@@ -52,9 +52,9 @@
 </head>
 <body>
 <div class="nav-links">
-    <a href="/hibernate_practice_war_exploded/">Welcome page</a>
-    <a href="/hibernate_practice_war_exploded/new-match">New match</a>
-    <a href="/hibernate_practice_war_exploded/matches">List matches</a>
+    <a href="${pageContext.request.contextPath}/match-score">Welcome page</a>
+    <a href="${pageContext.request.contextPath}/new-match/">New match</a>
+    <a href="${pageContext.request.contextPath}/matches/">List matches</a>
 </div>
 <div class="container">
     <h1>Error Occurred</h1>
