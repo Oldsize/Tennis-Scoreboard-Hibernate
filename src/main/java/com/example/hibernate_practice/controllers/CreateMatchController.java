@@ -17,15 +17,13 @@ public class CreateMatchController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/CreateMatchPage.jsp").forward(req, resp);
     }
-
-    private static String uuid;
-
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String player1 = req.getParameter("player1");
         String player2 = req.getParameter("player2");
         NewMatchService newMatchService = new NewMatchService();
         Match match = newMatchService.createMatch(player1, player2);
-        uuid = OngoingMatchesService.addMatch(match);
-        resp.sendRedirect("match-score/?uuid=" + uuid);
+        String uuid = OngoingMatchesService.addMatch(match);
+        String contextPath = req.getContextPath();
+        resp.sendRedirect(contextPath + "/match-score/?uuid=" + uuid);
     }
 }
