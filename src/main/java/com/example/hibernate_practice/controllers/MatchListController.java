@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,25 +18,21 @@ import java.util.Optional;
 public class MatchListController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MatchDAO matchDAO = MatchDAO.getInstance();
-        boolean isNextPage;
         PlayerDAO playerDAO = PlayerDAO.getInstance();
+
         String pageParameter = request.getParameter("page");
         String filter_by_player_name_parameter = request.getParameter("find_by_player_name");
+
         final String DEFAULT_PAGE = "1";
-        List<Match> currentPageMatchesList = new ArrayList<>();
-        List<Match> allMatchesList = new ArrayList<>();
-        List<Match> parcipicantPlayerMatchesList = new ArrayList<>();
+
+        List<Match> currentPageMatchesList;
+        List<Match> allMatchesList;
+        List<Match> parcipicantPlayerMatchesList;
+
         if (pageParameter == null)
             pageParameter = DEFAULT_PAGE;
         final int PAGE_PARAMETER_INT = Integer.parseInt(pageParameter);
-        Optional<Match> matchOpt = matchDAO.isNextPage(PAGE_PARAMETER_INT);
-        if (matchOpt.isEmpty()) {
-            isNextPage = false;
-            request.setAttribute("isNextPage", isNextPage);
-        } else {
-            isNextPage = true;
-            request.setAttribute("isNextPage", isNextPage);
-        }
+
 
         if (!matchDAO.checkIfMatchesExists()) {
             request.setAttribute("errorCode", 502);
@@ -46,16 +41,16 @@ public class MatchListController extends HttpServlet {
         }
 
         if (filter_by_player_name_parameter != null) {
-            allMatchesList = matchDAO.getAllMatches();
+            allMatchesList = matchDAO.getAll();
             int counter = allMatchesList.size();
-            Optional<Player> playerOpt = playerDAO.findPlayerByName(filter_by_player_name_parameter);
+            Optional<Player> playerOpt = playerDAO.findByName(filter_by_player_name_parameter);
 
             if (playerOpt.isEmpty()) {
                 request.setAttribute("errorCode", 404);
                 request.setAttribute("errorMessage", "Указаного вами игрока не существует.");
                 request.getRequestDispatcher("/WEB-INF/Error.jsp").forward(request, response);
             } else {
-                parcipicantPlayerMatchesList = matchDAO.findMatchesByParticipantPlayer(filter_by_player_name_parameter, PAGE_PARAMETER_INT);
+                parcipicantPlayerMatchesList = matchDAO.findByParticipantPlayer(filter_by_player_name_parameter, PAGE_PARAMETER_INT);
                 int pageCounter = (int) Math.ceil(counter / 10.0);
                 if (pageCounter == 0)
                     pageCounter = 1;
@@ -76,8 +71,8 @@ public class MatchListController extends HttpServlet {
                 }
             }
         } else {
-            currentPageMatchesList = matchDAO.getMatchesByPage(PAGE_PARAMETER_INT);
-            allMatchesList = matchDAO.getAllMatches();
+            currentPageMatchesList = matchDAO.getByPage(PAGE_PARAMETER_INT);
+            allMatchesList = matchDAO.getAll();
             int counter = allMatchesList.size();
             int pageCounter = (int) Math.ceil(counter / 10.0);
             if (pageCounter == 0)
