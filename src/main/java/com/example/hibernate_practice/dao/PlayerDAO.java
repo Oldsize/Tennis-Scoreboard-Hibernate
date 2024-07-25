@@ -19,36 +19,23 @@ public class PlayerDAO {
 
     ConnectionManager connectionManager = ConnectionManager.getInstance();
 
-    public Player savePlayer(Player player) {
+    public void save(Player player) {
         SessionFactory factory = connectionManager.getSessionFactory();
-        Session session = null;
-        try {
-            session = factory.getCurrentSession();
+        try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
             session.saveOrUpdate(player);
             session.getTransaction().commit();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
-        return player;
     }
 
-    public Optional<Player> findPlayerByName(String name) {
+    public Optional<Player> findByName(String name) {
         SessionFactory factory = connectionManager.getSessionFactory();
-        Session session = null;
         String hql = "FROM Player WHERE name = :name";
-        Optional<Player> findedPlayer = Optional.empty();
-        try {
-            session = factory.getCurrentSession();
+        Optional<Player> findedPlayer;
+        try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
             findedPlayer = session.createQuery(hql).setParameter("name", name).uniqueResultOptional();
             session.getTransaction().commit();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
         return findedPlayer;
     }

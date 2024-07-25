@@ -12,6 +12,6 @@ public class FinishedMatchesPersistenceService {
     }
 
     public void addMatch(Match match) {
-        matchDAO.saveMatch(match);
+        matchDAO.save(match);
     }
 }
