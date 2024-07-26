@@ -1,3 +1,4 @@
+<%@ page import="com.example.hibernate_practice.model.Match" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,17 +74,18 @@
     </style>
 </head>
 <body>
+<% Match match = (Match) request.getAttribute("match"); %>
 <div class="nav-links">
-    <a href="/hibernate_practice_war_exploded/">Welcome page</a>
-    <a href="/hibernate_practice_war_exploded/new-match">New match</a>
-    <a href="/hibernate_practice_war_exploded/matches">List matches</a>
+    <a href="${pageContext.request.contextPath}/">Welcome page</a>
+    <a href="${pageContext.request.contextPath}/new-match/">New match</a>
+    <a href="${pageContext.request.contextPath}/matches/">List matches</a>
 </div>
 <div class="container">
     <div class="player-info">
-        <div>Player 1: ${player1Name}</div>
-        <div>Player 2: ${player2Name}</div>
+        <div>Player 1: ${match.getPlayer1().getName()}</div>
+        <div>Player 2: ${match.getPlayer2().getName()}</div>
     </div>
-    <div class="winner">Winner: ${winnerName}</div>
+    <div class="winner">Winner: ${match.getWinner().getName()}</div>
 </div>
 </body>
 </html>
