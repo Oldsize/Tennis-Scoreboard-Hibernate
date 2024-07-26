@@ -1,14 +1,23 @@
 import com.example.hibernate_practice.model.EPlayer;
 import com.example.hibernate_practice.service.MatchScoreCalculationService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class MatchScoreCalculationServiceTest {
+    private MatchScoreCalculationService service;
+    private EPlayer player1;
+    private EPlayer player2;
+
+    @BeforeEach
+    void setUp() {
+        service = new MatchScoreCalculationService();
+        player1 = EPlayer.FIRST_PLAYER;
+        player2 = EPlayer.SECOND_PLAYER;
+    }
+
     @Test
     void testGamesCalculation() {
-        MatchScoreCalculationService service = new MatchScoreCalculationService();
-        EPlayer player1 = EPlayer.FIRST_PLAYER;
-        EPlayer player2 = EPlayer.SECOND_PLAYER;
         service.playerWins15Points(player1);
         service.playerWins15Points(player1);
         service.playerWins15Points(player1);
@@ -19,9 +28,6 @@ class MatchScoreCalculationServiceTest {
 
     @Test
     void testPointsCalculation() {
-        MatchScoreCalculationService service = new MatchScoreCalculationService();
-        EPlayer player1 = EPlayer.FIRST_PLAYER;
-        EPlayer player2 = EPlayer.SECOND_PLAYER;
         service.playerWins15Points(player1);
         service.playerWins15Points(player1);
         service.playerWins15Points(player1);
@@ -32,9 +38,6 @@ class MatchScoreCalculationServiceTest {
 
     @Test
     void testSetsCalculation() {
-        MatchScoreCalculationService service = new MatchScoreCalculationService();
-        EPlayer player1 = EPlayer.FIRST_PLAYER;
-        EPlayer player2 = EPlayer.SECOND_PLAYER;
         service.playerWinsSet(player1);
         service.playerWinsSet(player1);
         Assertions.assertTrue(service.getMatchScore().isMatchFinished());
@@ -42,41 +45,19 @@ class MatchScoreCalculationServiceTest {
 
     @Test
     void testTieBreakStarted() {
-        MatchScoreCalculationService service = new MatchScoreCalculationService();
-        EPlayer player1 = EPlayer.FIRST_PLAYER;
-        EPlayer player2 = EPlayer.SECOND_PLAYER;
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
+        for (int i = 0; i < 6; i++) {
+            service.playerWinsGame(player1);
+            service.playerWinsGame(player2);
+        }
         Assertions.assertTrue(service.getMatchScore().isTieBreak());
     }
 
     @Test
     void testTieBreakEnded() {
-        MatchScoreCalculationService service = new MatchScoreCalculationService();
-        EPlayer player1 = EPlayer.FIRST_PLAYER;
-        EPlayer player2 = EPlayer.SECOND_PLAYER;
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
+        for (int i = 0; i < 6; i++) {
+            service.playerWinsGame(player1);
+            service.playerWinsGame(player2);
+        }
         service.playerWinsTieBreakPoint(player1);
         service.playerWinsTieBreakPoint(player1);
         Assertions.assertFalse(service.getMatchScore().isTieBreak());
@@ -84,61 +65,65 @@ class MatchScoreCalculationServiceTest {
 
     @Test
     void testTieBreakCalculation() {
-        MatchScoreCalculationService service = new MatchScoreCalculationService();
-        EPlayer player1 = EPlayer.FIRST_PLAYER;
-        EPlayer player2 = EPlayer.SECOND_PLAYER;
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player1);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsGame(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player2);
+        for (int i = 0; i < 6; i++) {
+            service.playerWinsGame(player1);
+            service.playerWinsGame(player2);
+        }
+        for (int i = 0; i < 6; i++) {
+            service.playerWinsTieBreakPoint(player1);
+            service.playerWinsTieBreakPoint(player2);
+        }
         service.playerWinsTieBreakPoint(player2);
         service.playerWinsTieBreakPoint(player2);
         Assertions.assertEquals(1, service.getMatchScore().getPlayerSets(player2));
     }
 
     @Test
-    public void testSetsCalculation2() {
-        MatchScoreCalculationService service = new MatchScoreCalculationService();
-        EPlayer player1 = EPlayer.FIRST_PLAYER;
-        EPlayer player2 = EPlayer.SECOND_PLAYER;
-        // player 2 1 set
+    void testPlayerWinsGameWithoutTieBreak() {
+        for (int i = 0; i < 5; i++) {
+            service.playerWinsGame(player1);
+        }
+        service.playerWins15Points(player1);
+        service.playerWins15Points(player1);
+        service.playerWins15Points(player1);
+        service.playerWins15Points(player1);
+        Assertions.assertEquals(1, service.getMatchScore().getPlayerSets(player1));
+    }
+
+    @Test
+    void testPlayerWinsSetDirectly() {
         service.playerWinsSet(player2);
-        // player 2 1 game
-        service.playerWins15Points(player1);
-        service.playerWins15Points(player1);
-        service.playerWins15Points(player1);
-        service.playerWins15Points(player1);
-        System.out.println(service.getMatchScore().getPlayerSets(player2));
-        System.out.println(service.getMatchScore().getPlayerSets(player1));
+        service.playerWinsSet(player2);
+        Assertions.assertTrue(service.getMatchScore().isMatchFinished());
+        Assertions.assertEquals(player2, service.getMatchScore().getWinner());
+    }
 
+    @Test
+    void testTieBreakWithMultiplePoints() {
+        for (int i = 0; i < 6; i++) {
+            service.playerWinsGame(player1);
+            service.playerWinsGame(player2);
+        }
+        for (int i = 0; i < 7; i++) {
+            service.playerWinsTieBreakPoint(player1);
+            service.playerWinsTieBreakPoint(player2);
+        }
+        service.playerWinsTieBreakPoint(player1);
+        service.playerWinsTieBreakPoint(player1);
+        Assertions.assertEquals(1, service.getMatchScore().getPlayerSets(player1));
+    }
 
+    @Test
+    void testPlayerWinsAfterLeadingInTieBreak() {
+        for (int i = 0; i < 6; i++) {
+            service.playerWinsGame(player1);
+            service.playerWinsGame(player2);
+        }
+        for (int i = 0; i < 6; i++) {
+            service.playerWinsTieBreakPoint(player1);
+        }
+        service.playerWinsTieBreakPoint(player1);
+        service.playerWinsTieBreakPoint(player1);
+        Assertions.assertEquals(1, service.getMatchScore().getPlayerSets(player1));
     }
 }
