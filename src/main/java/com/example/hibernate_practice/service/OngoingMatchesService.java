@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class OngoingMatchesService {
-    private static Map<String, Match> onGoingMatches = new ConcurrentHashMap<>();
+    private static final Map<String, Match> onGoingMatches = new ConcurrentHashMap<>();
 
     public static String addMatch(Match match) {
         String uuid = generateUniqueUUID();
