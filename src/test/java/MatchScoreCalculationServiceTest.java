@@ -57,10 +57,16 @@ class MatchScoreCalculationServiceTest {
         for (int i = 0; i < 6; i++) {
             service.playerWinsGame(player1);
             service.playerWinsGame(player2);
+
+            for (int j = 0; i < 6; i++) {
+                service.playerWinsTieBreakPoint(player1);
+                service.playerWinsTieBreakPoint(player2);
+            }
+
+            service.playerWinsTieBreakPoint(player1);
+            service.playerWinsTieBreakPoint(player1);
+            Assertions.assertFalse(service.getMatchScore().isTieBreak());
         }
-        service.playerWinsTieBreakPoint(player1);
-        service.playerWinsTieBreakPoint(player1);
-        Assertions.assertFalse(service.getMatchScore().isTieBreak());
     }
 
     @Test
