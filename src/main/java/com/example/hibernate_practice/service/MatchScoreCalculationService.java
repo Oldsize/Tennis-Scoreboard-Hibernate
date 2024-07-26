@@ -5,9 +5,9 @@ import com.example.hibernate_practice.model.MatchScore;
 import lombok.Getter;
 import lombok.Setter;
 
+@Setter
 @Getter
 public class MatchScoreCalculationService {
-    @Setter
     private MatchScore matchScore;
 
     public MatchScoreCalculationService() {
@@ -16,7 +16,10 @@ public class MatchScoreCalculationService {
 
     public void playerWins15Points(EPlayer player) {
         int currentPoints = this.matchScore.getPlayerPoints(player);
-
+        if (matchScore.isTieBreak()) {
+            playerWinsTieBreakPoint(player);
+            return;
+        }
         if (currentPoints == 30) {
             this.matchScore.setPlayerPoints(player, 40);
         } else if (currentPoints == 40) {
@@ -34,9 +37,7 @@ public class MatchScoreCalculationService {
         } else if (player == EPlayer.SECOND_PLAYER) {
             opponentGames = this.matchScore.getPlayerGames(EPlayer.FIRST_PLAYER);
         }
-        if (opponentGames <= 4) {
-            playerWinsSet(player);
-        }
+
         if (playerGames == 5 && opponentGames == 6 || playerGames == 6 && opponentGames == 5) {
             this.matchScore.setPlayerGames(EPlayer.FIRST_PLAYER, 6);
             this.matchScore.setPlayerGames(EPlayer.SECOND_PLAYER, 6);
@@ -46,10 +47,11 @@ public class MatchScoreCalculationService {
         } else {
             this.matchScore.increasePlayerGames(player);
         }
+        if (opponentGames <= 4 && playerGames >= 5) {
+            playerWinsSet(player);
+        }
 
-
-        this.matchScore.setPlayerPoints(EPlayer.FIRST_PLAYER, 0);
-        this.matchScore.setPlayerPoints(EPlayer.SECOND_PLAYER, 0);
+        this.matchScore.clearPoints();
     }
 
     public void playerWinsSet(EPlayer player) {
@@ -61,10 +63,8 @@ public class MatchScoreCalculationService {
         } else {
             this.matchScore.increasePlayerSets(player);
         }
-        this.matchScore.setPlayerGames(EPlayer.FIRST_PLAYER, 0);
-        this.matchScore.setPlayerGames(EPlayer.SECOND_PLAYER, 0);
-        this.matchScore.setPlayerPoints(EPlayer.FIRST_PLAYER, 0);
-        this.matchScore.setPlayerPoints(EPlayer.SECOND_PLAYER, 0);
+        this.matchScore.clearGames();
+        this.matchScore.clearPoints();
     }
 
     public void playerWinsTieBreakPoint(EPlayer player) {
@@ -83,13 +83,12 @@ public class MatchScoreCalculationService {
             this.matchScore.tieBreakEnded();
             this.matchScore.clearTieBreakPoints();
         }
+        if (!matchScore.isTieBreak()) {
+            matchScore.clearTieBreakPoints();
+        }
     }
 
     public void startTieBreak() {
         this.matchScore.setTieBreak(true);
-    }
-
-    public boolean isPlayerWin(EPlayer player) {
-        return this.matchScore.getWinner() == player;
     }
 }
