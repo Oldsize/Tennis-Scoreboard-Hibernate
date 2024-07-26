@@ -4,25 +4,28 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class MatchScore {
-    @Getter @Setter
+    @Getter
+    @Setter
     private EPlayer winner;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean tieBreak;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean matchFinished;
 
-    private int[] points;
-    private int[] games;
-    private int[] sets;
-    private int[] tieBreakPoints;
+    private final int[] points;
+    private final int[] games;
+    private final int[] sets;
+    private final int[] tieBreakPoints;
 
     public MatchScore() {
-        this.points = new int[] {0, 0};
-        this.games = new int[] {0, 0};
-        this.sets = new int[] {0, 0};
-        this.tieBreakPoints = new int[] {0, 0};
+        this.points = new int[]{0, 0};
+        this.games = new int[]{0, 0};
+        this.sets = new int[]{0, 0};
+        this.tieBreakPoints = new int[]{0, 0};
         this.tieBreak = false;
         this.matchFinished = false;
         this.winner = null;
@@ -70,11 +73,6 @@ public class MatchScore {
         points[1] = 0;
     }
 
-    public void clearSets() {
-        sets[0] = 0;
-        sets[1] = 0;
-    }
-
     public int getPlayerTieBreakPoints(EPlayer player) {
         return tieBreakPoints[player.ordinal()];
     }
@@ -85,5 +83,10 @@ public class MatchScore {
 
     public void tieBreakEnded() {
         tieBreak = false;
+    }
+
+    public void clearGames() {
+        games[0] = 0;
+        games[1] = 0;
     }
 }
